@@ -1,22 +1,22 @@
 import {GLTFLoader} from "./GLTFLoader.js"
 
-let scene = new THREE.Scene()
-let camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.01,1000)
-let render = new THREE.WebGLRenderer()
-render.setSize(window.innerWidth,window.innerHeight)
-document.body.appendChild(render.domElement)
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0F0F0F)
+let camera = new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,0.1,5000)
+camera.rotation.y = 45/180*Math.PI
+camera.position.y = 100
+camera.position.x = 600
+camera.position.z = 1000
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+let renderer = new THREE.WebGLRenderer()
+renderer.setSize(window.innerWidth,window.innerHeight)
+document.body.appendChild(renderer.domElement)
 let loader = new GLTFLoader()
 let gameboy
 loader.load("./ressources/gameboy/scene.gltf",(gltf)=>{
   gameboy = gltf.scene
   scene.add(gltf.scene)
+  renderer.render(scene,camera)
+  console.log("model loaded")
 })
-let light = new THREE.HemisphereLight(0xffffff,0x000000,2)
-scene.add(light)
-camera.position.set(0,0,19)
-function animate(){
-  requestAnimationFrame(animate)
-  gameboy.rotate.y += 0.05
-  render.render(scene,camera)
-}
-animate()
