@@ -17,7 +17,7 @@ directionalLight.position.set(0.5,4,0.5)
 directionalLight.castShadow = true
 scene.add(directionalLight)
 
-let renderer = new THREE.WebGLRenderer()
+let renderer = new THREE.WebGLRenderer({antialias:true})
 renderer.setSize(window.innerWidth,window.innerHeight)
 
 document.body.appendChild(renderer.domElement)
