@@ -43,7 +43,8 @@ const lcd = makeElementObject('div', 150,150)
 //lcd.css3dObject.element.textContent = "This is a test screen"
 //description = await apiDescription(33)
 pokemon= await apiCall(counter)
-fillClone(pokemon)
+description = await apiDescription(counter)
+fillClone(pokemon,description)
 lcd.css3dObject.element.appendChild(clone)
 lcd.position.z=38
 lcd.position.y = 20
@@ -65,18 +66,19 @@ loader.load("./ressources/gameboy/scene.gltf",(gltf)=>{
 async function apiCall(id){
     res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
     let json = await res.json()
-    console.log(json)
+    //console.log(json)
     return json
 }
 
 async function apiDescription(id){
-  res = await fetch(`https://pkmnapi.com/v1/pokedex/texts/${id}`)
+  res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
   let json = await res.json()
-  console.log(json)
+  //console.log(json)
   return json
 }
 
-function fillClone(poke){
+function fillClone(poke,desc){
+  //console.log(desc.flavor_text_entries)
   clone = document.importNode(document.querySelector("#template").content,true)
   clone.querySelector(".name").textContent =  poke.name
   clone.querySelector(".number").textContent = `N° ${poke.id}`
@@ -84,6 +86,7 @@ function fillClone(poke){
   clone.querySelector(".weight").textContent = `WT ${poke.weight} lb`
   clone.querySelector(".height").textContent = `HT ${poke.height}'`
   clone.querySelector(".type").textContent = poke.types[0].type.name
+  clone.querySelector(".description").textContent = desc.flavor_text_entries[0].flavor_text
   //lcd.css3dObject.element.removeChild(lcd.css3dObject.element.querySelector(".screen"))
   lcd.css3dObject.element.appendChild(clone)
 }
@@ -133,16 +136,18 @@ document.addEventListener("keyup",async (e)=>{
     if(counter>1)
       counter = counter -1
     pokemon= await apiCall(counter)
+    description = await apiDescription(counter)
     lcd.css3dObject.element.removeChild(lcd.css3dObject.element.querySelector(".screen"))
-    fillClone(pokemon)
+    fillClone(pokemon,description)
 
   }if(e.keyCode === 39){
     console.log("right")
     if(counter < 151)
       counter = counter +1
     pokemon= await apiCall(counter)
+    description = await apiDescription(counter)
     lcd.css3dObject.element.removeChild(lcd.css3dObject.element.querySelector(".screen"))
-    fillClone(pokemon)
+    fillClone(pokemon,description)
 
   }
 
