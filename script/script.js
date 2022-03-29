@@ -36,12 +36,13 @@ controls.addEventListener("change", renderer)
 controls2.addEventListener("change", renderer2)
 
 const lcd = makeElementObject('div', 150,150)
-lcd.css3dObject.element.textContent = "This is a test screen"
-lcd.position.z=380
+//lcd.css3dObject.element.textContent = "This is a test screen"
+lcd.css3dObject.element.appendChild(document.importNode(document.querySelector("#template").content, true))
+lcd.position.z=38
 lcd.position.y = 120
-lcd.position.x = 15
+lcd.position.x = 11
 lcd.css3dObject.element.style.transform = 'scale(1.0)';
-lcd.css3dObject.element.setAttribute('contenteditable', '');
+//lcd.css3dObject.element.setAttribute('contenteditable', '');
 scene.add(lcd)
 
 let loader = new GLTFLoader()
@@ -68,7 +69,7 @@ function makeElementObject(type, width, height) {
     element.style.width = width+'px';
     element.style.height = height+'px';
     element.style.opacity = 0.999;
-    element.style.color = 0x0F0F0F
+    element.style.color = 0x00FF00
 
     var css3dObject = new CSS3DObject( element );
     obj.css3dObject = css3dObject
@@ -78,7 +79,7 @@ function makeElementObject(type, width, height) {
     // clip a WebGL geometry with it.
     var material = new THREE.MeshPhongMaterial({
         opacity	: 0,
-        color	: new THREE.Color( 0x0000ff ),
+        color	: new THREE.Color( 0x00ff00 ),
         blending: THREE.NoBlending,
         side	: THREE.DoubleSide,
     });

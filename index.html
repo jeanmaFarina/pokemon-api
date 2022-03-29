@@ -7,9 +7,42 @@
     body{margin: 0}
     canvas{width: 100%;height:100%}
   </style>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <title>Pokedex</title>
 </head>
 <body>
+    <template id="template">
+        <div class="screen">
+
+        <div class="column">
+
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png" alt="pokemon picture">
+          <div class="number">
+            N° 15
+          </div>
+        </div>
+        <div class="column">
+          <div class="name">Salameche</div>
+          <div class="type">
+            fire
+          </div>
+          <div class="weight">
+            222
+          </div>
+          <div class="height">
+            333
+          </div>
+        </div>
+        <div class="description">
+            description
+            sdsd
+            DoubleSide
+        </div>
+      </div>
+    </template>
     <script src="./script/three.js"></script>
     <script type="module" src="./script/GLTFLoader.js"></script>
     <script type="module" src="./script/OrbitControls.js"></script>
