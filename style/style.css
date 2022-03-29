@@ -24,6 +24,10 @@ body{
   border-style: solid;
 
 }
+p{
+  position: fixed;
+  color: orange;
+}
 .first{
   border-right-width: 1px;
 }
