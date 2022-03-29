@@ -3,12 +3,16 @@ import {OrbitControls} from "./OrbitControls.js"
 import {CSS3DObject} from "./CSS3DRenderer.js"
 import {CSS3DRenderer} from "./CSS3DRenderer.js"
 const scene = new THREE.Scene({ antialias: true});
+let res
+let clone = document.importNode(document.querySelector("#template").content,true)
+let pokemon
+let description
+let counter = 1
 scene.background = new THREE.Color(0x0F0F0F)
-
 let camera = new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,0.1,5000)
 camera.rotation.y = 20/180*Math.PI
-camera.position.y = 100
-camera.position.x = 500
+camera.position.y = 150
+camera.position.x = 100
 camera.position.z = 1000
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
@@ -37,9 +41,12 @@ controls2.addEventListener("change", renderer2)
 
 const lcd = makeElementObject('div', 150,150)
 //lcd.css3dObject.element.textContent = "This is a test screen"
-lcd.css3dObject.element.appendChild(document.importNode(document.querySelector("#template").content, true))
+//description = await apiDescription(33)
+pokemon= await apiCall(counter)
+fillClone(pokemon)
+lcd.css3dObject.element.appendChild(clone)
 lcd.position.z=38
-lcd.position.y = 120
+lcd.position.y = 20
 lcd.position.x = 11
 lcd.css3dObject.element.style.transform = 'scale(1.0)';
 //lcd.css3dObject.element.setAttribute('contenteditable', '');
@@ -49,11 +56,37 @@ let loader = new GLTFLoader()
 let gameboy
 loader.load("./ressources/gameboy/scene.gltf",(gltf)=>{
   gameboy = gltf.scene
-  scene.add(gltf.scene)
-
+  gameboy.position.y = -100
+  scene.add(gameboy)
   animate()
   console.log("model loaded")
 })
+
+async function apiCall(id){
+    res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
+    let json = await res.json()
+    console.log(json)
+    return json
+}
+
+async function apiDescription(id){
+  res = await fetch(`https://pkmnapi.com/v1/pokedex/texts/${id}`)
+  let json = await res.json()
+  console.log(json)
+  return json
+}
+
+function fillClone(poke){
+  clone = document.importNode(document.querySelector("#template").content,true)
+  clone.querySelector(".name").textContent =  poke.name
+  clone.querySelector(".number").textContent = `N° ${poke.id}`
+  clone.querySelector("img").src = poke.sprites.front_default
+  clone.querySelector(".weight").textContent = `WT ${poke.weight} lb`
+  clone.querySelector(".height").textContent = `HT ${poke.height}'`
+  clone.querySelector(".type").textContent = poke.types[0].type.name
+  //lcd.css3dObject.element.removeChild(lcd.css3dObject.element.querySelector(".screen"))
+  lcd.css3dObject.element.appendChild(clone)
+}
 
 function animate(){
   renderer.render(scene,camera)
@@ -93,3 +126,24 @@ function makeElementObject(type, width, height) {
 
     return obj
 }
+
+document.addEventListener("keyup",async (e)=>{
+  if(e.keyCode === 37){
+    console.log("left")
+    if(counter>1)
+      counter = counter -1
+    pokemon= await apiCall(counter)
+    lcd.css3dObject.element.removeChild(lcd.css3dObject.element.querySelector(".screen"))
+    fillClone(pokemon)
+
+  }if(e.keyCode === 39){
+    console.log("right")
+    if(counter < 151)
+      counter = counter +1
+    pokemon= await apiCall(counter)
+    lcd.css3dObject.element.removeChild(lcd.css3dObject.element.querySelector(".screen"))
+    fillClone(pokemon)
+
+  }
+
+})
